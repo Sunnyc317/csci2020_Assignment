@@ -22,6 +22,8 @@ public class Calculator extends Application {
 		TextField tf2 = new TextField();
 		TextField tf3 = new TextField();
 		TextField tf4 = new TextField();
+		tf4.setDisable(true);
+		tf4.setStyle("-fx-opacity: 1;");
 
 		Label amount = new Label("Investment Amount");
 		Label year = new Label("Years");

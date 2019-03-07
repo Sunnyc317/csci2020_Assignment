@@ -3,6 +3,7 @@ import java.util.Random;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.shape.Circle;
@@ -18,7 +19,7 @@ public class Question3 extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		Pane pane = new Pane();
-		// make them constent
+		// make them constant
 		Circle c = new Circle(150, 150, radius);
 		c.setFill(Color.WHITE);
 		c.setStroke(Color.BLACK);
@@ -56,101 +57,53 @@ public class Question3 extends Application {
 		}
 
 		point[0].setOnMouseDragged(e -> {
-			double mx = e.getX();
-			double my = e.getY();
-
-			double[] cords;
-			cords = getCord(mx,my, 1);
-
-			point[0].setCenterX(cords[0]);
-			point[0].setCenterY(cords[1]);
-
-
-			ln[0].setStartX(point[0].getCenterX());
-			ln[0].setStartY(point[0].getCenterY());
-			ln[0].setEndX(point[1].getCenterX());
-			ln[0].setEndY(point[1].getCenterY());
-
-			ln[2].setEndX(point[0].getCenterX());
-			ln[2].setEndY(point[0].getCenterY());
-
-			double[] cordangle = getCord(point[0].getCenterX(), point[0].getCenterY(), 0.9);
-			angles[0].setX(cordangle[0]);
-			angles[0].setY(cordangle[1]);
-
-			double linea = getDistance(ln[1]);
-			double lineb = getDistance(ln[2]);
-			double linec = getDistance(ln[0]);
-			angles[0].setText(getAngle(linea, lineb, linec) + "");
-			angles[1].setText(getAngle(lineb, linea, linec) + "");
-			angles[2].setText(getAngle(linec, lineb, linea) + "");
+			setTriangle(e, point[0], 0, ln, angles);
 		});
 
 		point[1].setOnMouseDragged(e -> {
-			double mx = e.getX();
-			double my = e.getY();
-
-			double[] cords;
-			cords = getCord(mx,my, 1);
-
-			point[1].setCenterX(cords[0]);
-			point[1].setCenterY(cords[1]);
-
-
-			ln[1].setStartX(point[1].getCenterX());
-			ln[1].setStartY(point[1].getCenterY());
-			ln[1].setEndX(point[2].getCenterX());
-			ln[1].setEndY(point[2].getCenterY());
-
-			ln[0].setEndX(point[1].getCenterX());
-			ln[0].setEndY(point[1].getCenterY());
-
-			double[] cordangle = getCord(point[1].getCenterX(), point[1].getCenterY(), 0.9);
-			angles[1].setX(cordangle[0]);
-			angles[1].setY(cordangle[1]);
-
-			double linea = getDistance(ln[1]);
-			double lineb = getDistance(ln[2]);
-			double linec = getDistance(ln[0]);
-			angles[0].setText(getAngle(linea, lineb, linec) + "");
-			angles[1].setText(getAngle(lineb, linea, linec) + "");
-			angles[2].setText(getAngle(linec, lineb, linea) + "");
+			setTriangle(e, point[1], 1, ln, angles);
 		});
 
 		point[2].setOnMouseDragged(e -> {
-			double mx = e.getX();
-			double my = e.getY();
-
-			double[] cords;
-			cords = getCord(mx,my, 1);
-
-			point[2].setCenterX(cords[0]);
-			point[2].setCenterY(cords[1]);
-
-
-			ln[2].setStartX(point[2].getCenterX());
-			ln[2].setStartY(point[2].getCenterY());
-			ln[2].setEndX(point[0].getCenterX());
-			ln[2].setEndY(point[0].getCenterY());
-
-			ln[1].setEndX(point[2].getCenterX());
-			ln[1].setEndY(point[2].getCenterY());
-
-			double linea = getDistance(ln[1]);
-			double lineb = getDistance(ln[2]);
-			double linec = getDistance(ln[0]);
-			angles[0].setText(getAngle(linea, lineb, linec) + "");
-			angles[1].setText(getAngle(lineb, linea, linec) + "");
-			angles[2].setText(getAngle(linec, lineb, linea) + "");
-
-			double[] cordangle = getCord(point[2].getCenterX(), point[2].getCenterY(), 0.9);
-			angles[2].setX(cordangle[0]);
-			angles[2].setY(cordangle[1]);
+			setTriangle(e, point[2], 2, ln, angles);
 		});
 
 		Scene scene = new Scene(pane, 300, 300);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	public void setTriangle(MouseEvent e, Circle p,
+			int index, Line[] ln, Text[] angles){
+		double mx = e.getX();
+		double my = e.getY();
+
+		double[] cords;
+		cords = getCord(mx,my, 1);
+
+		point[index].setCenterX(cords[0]);
+		point[index].setCenterY(cords[1]);
+
+
+		ln[index].setStartX(point[index].getCenterX());
+		ln[index].setStartY(point[index].getCenterY());
+		ln[index].setEndX(point[(index+1)%3].getCenterX());
+		ln[index].setEndY(point[(index+1)%3].getCenterY());
+
+		ln[(index+2)%3].setEndX(point[index].getCenterX());
+		ln[(index+2)%3].setEndY(point[index].getCenterY());
+
+		double[] cordangle = getCord(point[index].getCenterX(),
+				point[index].getCenterY(), 0.9);
+		angles[index].setX(cordangle[0]);
+		angles[index].setY(cordangle[1]);
+
+		double linea = getDistance(ln[1]);
+		double lineb = getDistance(ln[2]);
+		double linec = getDistance(ln[0]);
+		angles[0].setText(getAngle(linea, lineb, linec) + "");
+		angles[1].setText(getAngle(lineb, linea, linec) + "");
+		angles[2].setText(getAngle(linec, lineb, linea) + "");
 	}
 
 	public int getAngle(double la, double lb, double lc) {
@@ -173,7 +126,6 @@ public class Question3 extends Application {
 
 		return cords;
 	}
-
 
 	public static void main(String[] args) {
 		launch(args);

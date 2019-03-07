@@ -1,11 +1,7 @@
 import javafx.application.Application;
-import java.util.Random;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -19,9 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-// action event for button
-// transfer number of letters to histogram
-// put a line under histogram and text under histogram
 
 public class Question4 extends Application {
 	@Override
@@ -40,7 +33,7 @@ public class Question4 extends Application {
 
 		//find the index of the highest rectangle
 
-		Scene scene = new Scene(pane,400,300);
+		Scene scene = new Scene(pane,450,400);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
@@ -52,14 +45,16 @@ public class Question4 extends Application {
 		double gap = 3;
 		histogram.setStyle("-fx-border-color: black");
 
+		//assign 'A' to 'Z' to text &
+		//initialize rectangles &
+		//add all to the pane histogram
 		for (int i = 0; i < 26; i++) {
 			rec[i] = new Rectangle();
 			text[i] = new Text(String.valueOf((char)('A'+i)));
-			System.out.println(String.valueOf((char)('A'+i)));
 			histogram.getChildren().add(text[i]);
 			histogram.getChildren().add(rec[i]);
 		}
-		histogram.getChildren().addAll(line);
+		histogram.getChildren().add(line);
 
 
 		bt.setOnAction(e-> {
@@ -70,15 +65,14 @@ public class Question4 extends Application {
 
 			int[] letters = new int[26];
 			Scanner input = null;
-			Label notfound = new Label("File not found");
 			try {
 				input = new Scanner(file);
 				pane.setTop(new Label("There you go"));
 			} catch (FileNotFoundException e1) {
-				pane.setTop(notfound);
+				pane.setTop(new Label("File not found"));
 			}
+
 			while (input.hasNext()) {
-//				notfound.setText("There you go");
 				String word = input.next();
 				char[] ltr = word.toCharArray();
 
@@ -93,11 +87,11 @@ public class Question4 extends Application {
 					}
 				}
 			}
+
 			input.close();
 
 			int highest = 0;
-			//set the height and width of the rectangles
-
+			//find the index of the highest rectangle
 			for (int i = 0; i < 26; i++){
 				if (letters[i] > letters[highest]){
 					highest = i;
@@ -107,9 +101,7 @@ public class Question4 extends Application {
 
 			primaryStage.setHeight(height[highest]+200);
 
-			double base_y = height[highest] + primaryStage.getY();
 			for (int i = 0; i < 26; i++) {
-//				rec[i] = new Rectangle(width, height[i]);
 				rec[i].setWidth(width);
 				rec[i].setHeight(height[i]);
 				rec[i].setStroke(Color.BLACK);
